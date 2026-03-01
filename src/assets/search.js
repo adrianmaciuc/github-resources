@@ -1,8 +1,9 @@
-import { buildResultsMarkup } from "./search-utils.js";
+import { buildResultsMessage, getVisibleUrlSet, normalizePath } from "./search-utils.js";
 
 const input = document.querySelector("[data-search-input]");
 const results = document.querySelector("[data-search-results]");
 const list = document.querySelector(".snippet-list");
+const cards = Array.from(document.querySelectorAll("[data-snippet-url]"));
 
 const setResultsMessage = (text) => {
   if (!results) return;
@@ -16,12 +17,20 @@ const toggleListVisibility = (show) => {
 
 const renderSearchResults = (items) => {
   if (!results) return;
-  results.innerHTML = buildResultsMarkup(items);
-  toggleListVisibility(false);
+  const visible = getVisibleUrlSet(items);
+  cards.forEach((card) => {
+    const url = normalizePath(card.dataset.snippetUrl || "");
+    card.style.display = visible.has(url) ? "" : "none";
+  });
+  results.textContent = buildResultsMessage(visible.size);
+  toggleListVisibility(true);
 };
 
 const clearSearch = () => {
-  if (results) results.innerHTML = "";
+  if (results) results.textContent = "";
+  cards.forEach((card) => {
+    card.style.display = "";
+  });
   toggleListVisibility(true);
 };
 

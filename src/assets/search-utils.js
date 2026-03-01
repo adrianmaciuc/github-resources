@@ -1,17 +1,17 @@
-export const buildResultsMarkup = (items) => {
-  if (!items.length) {
-    return "<p class=\"search-empty\">No matching snippets.</p>";
+export const normalizePath = (url) => {
+  try {
+    const parsed = new URL(url, "http://local");
+    return parsed.pathname.replace(/\/$/, "");
+  } catch {
+    return String(url).replace(/\/$/, "");
   }
+};
 
-  return items
-    .slice(0, 20)
-    .map(
-      (item) => `
-      <div class="search-result">
-        <a class="search-result__link" href="${item.url}">${item.meta.title}</a>
-        <p class="search-result__excerpt">${item.excerpt}</p>
-      </div>
-    `
-    )
-    .join("");
+export const getVisibleUrlSet = (items) => {
+  return new Set(items.map((item) => normalizePath(item.url)));
+};
+
+export const buildResultsMessage = (count) => {
+  if (!count) return "No matching snippets.";
+  return `Showing ${count} result${count === 1 ? "" : "s"}.`;
 };

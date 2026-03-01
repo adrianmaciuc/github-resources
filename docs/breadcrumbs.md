@@ -16,3 +16,4 @@
 - 2026-03-01: Fixed asset URLs for GitHub Pages by adding pathPrefix and using the url filter for CSS/JS and snippet links.
 - 2026-03-01: Added Prism token color styles for code snippets to improve syntax differentiation.
 - 2026-03-01: Reduced max content width for better reading line length.
+- 2026-03-01: Adjusted search to filter existing cards on input and added URL normalization utilities with tests.
