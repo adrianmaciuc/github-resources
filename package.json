@@ -1,0 +1,25 @@
+{
+  "name": "github-resources",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "vitest run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.2",
+    "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.2",
+    "@testing-library/dom": "^10.4.1",
+    "happy-dom": "^20.7.0",
+    "linkedom": "^0.18.12",
+    "markdown-it": "^14.1.1",
+    "vitest": "^4.0.18"
+  }
+}

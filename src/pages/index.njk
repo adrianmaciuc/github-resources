@@ -1,0 +1,18 @@
+---
+layout: layouts/base.njk
+title: GitHub Resources
+description: Code snippets and markdown resources
+---
+
+<main class="page">
+  <header class="page__header">
+    <h1 class="page__title">GitHub Resources</h1>
+    <p class="page__subtitle">Curated code snippets and markdown resources.</p>
+  </header>
+
+  <section class="snippet-list">
+    {% for snippet in collections.snippets %}
+      {% include "snippet-card.njk" %}
+    {% endfor %}
+  </section>
+</main>

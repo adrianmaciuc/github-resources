@@ -1,0 +1,14 @@
+<article class="snippet-card" data-category="{{ snippet.data.category }}">
+  <header class="snippet-card__header">
+    <h2 class="snippet-card__title">{{ snippet.data.title }}</h2>
+    <p class="snippet-card__description">{{ snippet.data.description }}</p>
+  </header>
+  <ul class="snippet-card__tags">
+    {% for tag in snippet.data.tags %}
+      <li class="tag">{{ tag }}</li>
+    {% endfor %}
+  </ul>
+  <section class="snippet-card__code">
+    {{ snippet.templateContent | safe }}
+  </section>
+</article>

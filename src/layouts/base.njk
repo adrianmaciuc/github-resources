@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ title or "GitHub Resources" }}</title>
+    <meta name="description" content="{{ description or "Code snippets and resources" }}" />
+  </head>
+  <body>
+    <div class="app-shell">
+      {{ content | safe }}
+    </div>
+  </body>
+</html>
