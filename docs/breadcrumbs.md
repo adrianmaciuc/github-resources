@@ -12,3 +12,4 @@
 - 2026-03-01: Removed Docker compose snippet and replaced README example with GitHub Actions snippet to avoid Docker content.
 - 2026-03-01: Ran clean build (removed _site then rebuilt) to refresh Pagefind index; build successful.
 - 2026-03-01: Added clean and build:clean scripts to package.json and documented clean build in README.
+- 2026-03-01: Fixed index routing by setting permalink `/` for src/pages/index.njk; clean rebuild produces _site/index.html.
