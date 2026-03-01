@@ -1,5 +1,7 @@
 # GitHub Resources
 
+https://adrianmaciuc.github.io/github-resources/
+
 Static code snippet showcase for GitHub Pages. Built with Eleventy and designed for fast copy/paste, searchable content, and simple markdown-based management.
 
 ## Requirements
