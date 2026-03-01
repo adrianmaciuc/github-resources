@@ -8,7 +8,13 @@
       <li class="tag">{{ tag }}</li>
     {% endfor %}
   </ul>
-  <section class="snippet-card__code">
+  <section class="snippet-card__code" data-copy-scope>
+    <button class="code-copy" type="button" data-copy-button aria-label="Copy code to clipboard">
+      Copy
+    </button>
     {{ snippet.templateContent | safe }}
   </section>
+  <footer class="snippet-card__footer">
+    <a class="snippet-card__link" href="{{ snippet.url }}">Open snippet</a>
+  </footer>
 </article>

@@ -1,4 +1,5 @@
 ---
+layout: base.njk
 title: "GitHub Actions Node CI"
 description: "CI workflow for Node projects with caching and tests"
 category: "CI/CD"

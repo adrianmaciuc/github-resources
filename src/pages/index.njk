@@ -1,5 +1,5 @@
 ---
-layout: layouts/base.njk
+layout: base.njk
 title: GitHub Resources
 description: Code snippets and markdown resources
 ---
@@ -9,6 +9,18 @@ description: Code snippets and markdown resources
     <h1 class="page__title">GitHub Resources</h1>
     <p class="page__subtitle">Curated code snippets and markdown resources.</p>
   </header>
+
+  <section class="page__search">
+    <label class="search__label" for="search-input">Search snippets</label>
+    <input
+      id="search-input"
+      class="search__input"
+      type="search"
+      placeholder="Search by title, tags, or content"
+      data-search-input
+    />
+    <div class="search__results" data-search-results></div>
+  </section>
 
   <section class="snippet-list">
     {% for snippet in collections.snippets %}

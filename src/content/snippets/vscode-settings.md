@@ -1,4 +1,5 @@
 ---
+layout: base.njk
 title: "VS Code Settings (Productivity)"
 description: "Focused editor defaults for formatting, linting, and file hygiene"
 category: "Tooling"

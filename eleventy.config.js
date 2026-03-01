@@ -3,6 +3,7 @@ const markdownIt = require("markdown-it");
 
 module.exports = function (eleventyConfig) {
   eleventyConfig.addPlugin(syntaxHighlight);
+  eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
 
   const md = markdownIt({
     html: true,
@@ -15,6 +16,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addCollection("snippets", (collectionApi) => {
     return collectionApi
       .getFilteredByGlob("src/content/snippets/**/*.md")
+      .filter((item) => item.inputPath.includes("/snippets/"))
       .sort((a, b) => {
         const aDate = new Date(a.data.date).getTime();
         const bDate = new Date(b.data.date).getTime();
