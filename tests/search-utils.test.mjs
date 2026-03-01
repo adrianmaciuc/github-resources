@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { buildResultsMessage, getVisibleUrlSet, normalizePath } from "../src/assets/search-utils.js";
+import { getVisibleSlugSet, extractSlug } from "../src/assets/search-utils.js";
 
 describe("search utils", () => {
   it("normalizes URLs by removing trailing slash", () => {
@@ -15,6 +16,14 @@ describe("search utils", () => {
     const set = getVisibleUrlSet(items);
     expect(set.has("/a")).toBe(true);
     expect(set.has("/b")).toBe(true);
+  });
+
+  it("builds visible slug set and extract slug", () => {
+    const items = [{ url: "/content/snippets/one/" }, { url: "/content/snippets/two" }];
+    const set = getVisibleSlugSet(items);
+    expect(set.has("one")).toBe(true);
+    expect(set.has("two")).toBe(true);
+    expect(extractSlug("/a/b/c")).toBe("c");
   });
 
   it("returns a results message", () => {

@@ -18,11 +18,17 @@ const toggleListVisibility = (show) => {
 const renderSearchResults = (items) => {
   if (!results) return;
   const visible = getVisibleUrlSet(items);
+  // also compute slugs to match per-snippet slugs
+  const slugs = getVisibleSlugSet(items);
   cards.forEach((card) => {
     const url = normalizePath(card.dataset.snippetUrl || "");
-    card.style.display = visible.has(url) ? "" : "none";
+    const slug = card.dataset.snippetSlug || "";
+    const show = visible.has(url) || slugs.has(slug);
+    card.style.display = show ? "" : "none";
   });
-  results.textContent = buildResultsMessage(visible.size);
+  results.textContent = buildResultsMessage(
+    Array.from(cards).filter((c) => c.style.display !== "none").length
+  );
   toggleListVisibility(true);
 };
 
