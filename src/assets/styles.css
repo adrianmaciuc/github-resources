@@ -170,10 +170,18 @@ body {
 
 .snippet-card__code pre {
   margin: 0;
-  overflow-x: auto;
+  /* Allow long lines to wrap for better readability; keep monospace */
+  white-space: pre-wrap; /* CSS3 */
+  white-space: -moz-pre-wrap; /* Firefox */
+  white-space: -pre-wrap; /* Opera <7 */
+  white-space: -o-pre-wrap; /* Opera 7 */
+  word-break: break-word;
+  overflow-wrap: anywhere;
   font-family: var(--mono);
   font-size: 0.9rem;
   line-height: 1.6;
+  max-height: 520px; /* cap extremely long blocks */
+  overflow: auto; /* allow vertical scroll if wrapped content is very long */
 }
 
 .snippet-card__code code[class*="language-"] {
