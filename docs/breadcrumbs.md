@@ -17,4 +17,5 @@
 - 2026-03-01: Added Prism token color styles for code snippets to improve syntax differentiation.
 - 2026-03-01: Reduced max content width for better reading line length.
 - 2026-03-01: Adjusted search to filter existing cards on input and added URL normalization utilities with tests.
+ - 2026-03-01: Fixed search clearing behavior: restore card visibility and remove highlight spans when query is cleared. Updated `src/assets/search.js`.
 - 2026-03-01: Ensure long code lines wrap and extremely long blocks are capped with max-height and vertical scroll.
