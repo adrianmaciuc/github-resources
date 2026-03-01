@@ -11,14 +11,14 @@
       href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Spectral:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/assets/styles.css" />
+    <link rel="stylesheet" href="{{ "/assets/styles.css" | url }}" />
   </head>
   <body>
     <div class="app-shell">
       {{ content | safe }}
     </div>
-    <script src="/pagefind/pagefind.js" defer></script>
-    <script src="/assets/copy.js" defer></script>
-    <script type="module" src="/assets/search.js"></script>
+    <script src="{{ "/pagefind/pagefind.js" | url }}" defer></script>
+    <script src="{{ "/assets/copy.js" | url }}" defer></script>
+    <script type="module" src="{{ "/assets/search.js" | url }}"></script>
   </body>
 </html>

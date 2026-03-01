@@ -32,6 +32,7 @@ module.exports = function (eleventyConfig) {
       layouts: "layouts",
       output: "_site",
     },
+    pathPrefix: "/github-resources/",
     markdownTemplateEngine: "njk",
     htmlTemplateEngine: "njk",
     templateFormats: ["md", "njk"],

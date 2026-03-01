@@ -13,3 +13,4 @@
 - 2026-03-01: Ran clean build (removed _site then rebuilt) to refresh Pagefind index; build successful.
 - 2026-03-01: Added clean and build:clean scripts to package.json and documented clean build in README.
 - 2026-03-01: Fixed index routing by setting permalink `/` for src/pages/index.njk; clean rebuild produces _site/index.html.
+- 2026-03-01: Fixed asset URLs for GitHub Pages by adding pathPrefix and using the url filter for CSS/JS and snippet links.
