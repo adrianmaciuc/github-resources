@@ -29,7 +29,7 @@ body {
 }
 
 .app-shell {
-  max-width: 1100px;
+  max-width: 960px;
   margin: 0 auto;
   padding: 48px 24px 80px;
 }
@@ -174,6 +174,63 @@ body {
   font-family: var(--mono);
   font-size: 0.9rem;
   line-height: 1.6;
+}
+
+.snippet-card__code code[class*="language-"] {
+  color: var(--code-ink);
+}
+
+.snippet-card__code .token.comment,
+.snippet-card__code .token.prolog,
+.snippet-card__code .token.doctype,
+.snippet-card__code .token.cdata {
+  color: #94a3b8;
+}
+
+.snippet-card__code .token.punctuation {
+  color: #cbd5f5;
+}
+
+.snippet-card__code .token.property,
+.snippet-card__code .token.tag,
+.snippet-card__code .token.constant,
+.snippet-card__code .token.symbol,
+.snippet-card__code .token.deleted {
+  color: #7dd3fc;
+}
+
+.snippet-card__code .token.boolean,
+.snippet-card__code .token.number {
+  color: #fca5a5;
+}
+
+.snippet-card__code .token.selector,
+.snippet-card__code .token.attr-name,
+.snippet-card__code .token.string,
+.snippet-card__code .token.char,
+.snippet-card__code .token.builtin,
+.snippet-card__code .token.inserted {
+  color: #a7f3d0;
+}
+
+.snippet-card__code .token.operator,
+.snippet-card__code .token.entity,
+.snippet-card__code .token.url,
+.snippet-card__code .token.variable {
+  color: #fcd34d;
+}
+
+.snippet-card__code .token.atrule,
+.snippet-card__code .token.attr-value,
+.snippet-card__code .token.keyword,
+.snippet-card__code .token.function,
+.snippet-card__code .token.class-name {
+  color: #c4b5fd;
+}
+
+.snippet-card__code .token.regex,
+.snippet-card__code .token.important {
+  color: #fda4af;
 }
 
 .code-copy {
