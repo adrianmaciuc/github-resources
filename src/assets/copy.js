@@ -23,11 +23,13 @@ const copyText = async (text) => {
 
 const setButtonState = (button, state) => {
   if (state === "copied") {
-    button.textContent = "Copied";
+    button.textContent = "Got it!";
     button.setAttribute("aria-live", "polite");
+    button.style.transform = "scale(1.1) rotate(5deg)";
   } else {
     button.textContent = "Copy";
     button.removeAttribute("aria-live");
+    button.style.transform = "";
   }
 };
 
