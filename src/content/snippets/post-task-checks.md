@@ -42,7 +42,6 @@ Run when `.ts`, `.tsx`, `.js`, `.jsx`, or config files changed.
 npx tsc --noEmit --pretty
 npx eslint . --max-warnings 0
 ```
-````
 
 For non-e2e tests, prefer the documented project command.
 
@@ -121,3 +120,4 @@ npx stylelint "**/*.{css,scss,html}"
 ```
 
 ```
+````
