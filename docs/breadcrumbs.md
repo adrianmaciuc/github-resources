@@ -10,12 +10,15 @@
 - 2026-03-01: Added base styling with custom fonts, card layout, and search UI. Linked stylesheet in base layout.
 - 2026-03-01: Fixed Eleventy layout reference in src/pages/index.njk (layout path should be base.njk, not layouts/base.njk).
 - 2026-03-01: Removed Docker compose snippet and replaced README example with GitHub Actions snippet to avoid Docker content.
-- 2026-03-01: Ran clean build (removed _site then rebuilt) to refresh Pagefind index; build successful.
+- 2026-03-01: Ran clean build (removed \_site then rebuilt) to refresh Pagefind index; build successful.
 - 2026-03-01: Added clean and build:clean scripts to package.json and documented clean build in README.
-- 2026-03-01: Fixed index routing by setting permalink `/` for src/pages/index.njk; clean rebuild produces _site/index.html.
+- 2026-03-01: Fixed index routing by setting permalink `/` for src/pages/index.njk; clean rebuild produces \_site/index.html.
 - 2026-03-01: Fixed asset URLs for GitHub Pages by adding pathPrefix and using the url filter for CSS/JS and snippet links.
 - 2026-03-01: Added Prism token color styles for code snippets to improve syntax differentiation.
 - 2026-03-01: Reduced max content width for better reading line length.
 - 2026-03-01: Adjusted search to filter existing cards on input and added URL normalization utilities with tests.
- - 2026-03-01: Fixed search clearing behavior: restore card visibility and remove highlight spans when query is cleared. Updated `src/assets/search.js`.
+- 2026-03-01: Fixed search clearing behavior: restore card visibility and remove highlight spans when query is cleared. Updated `src/assets/search.js`.
 - 2026-03-01: Ensure long code lines wrap and extremely long blocks are capped with max-height and vertical scroll.
+- Task: Fix CSS not loading when switching to custom domain on GitHub Pages
+- Change: Make Eleventy `pathPrefix` dynamic — if a `CNAME` file exists set `pathPrefix: '/'`, otherwise use `/github-resources/` or `PATH_PREFIX` env override
+- Outcome: Built site locally; asset URLs in `_site` will use `/` when CNAME exists. This avoids broken `/repo-name/...` absolute URLs on custom domains.

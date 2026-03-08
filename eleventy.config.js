@@ -25,6 +25,18 @@ module.exports = function (eleventyConfig) {
       });
   });
 
+  // Determine pathPrefix intelligently:
+  // - If a CNAME file exists at the repository root we assume this is a
+  //   GitHub Pages custom domain build and serve assets from the site root
+  //   (i.e. pathPrefix = "/").
+  // - Otherwise fall back to the repo-based path used previously. You can
+  //   also override the value by setting the PATH_PREFIX environment variable.
+  const fs = require("fs");
+  const path = require("path");
+  const repoPathPrefix = process.env.PATH_PREFIX || "/github-resources/";
+  const cnamePath = path.join(process.cwd(), "CNAME");
+  const pathPrefix = fs.existsSync(cnamePath) ? "/" : repoPathPrefix;
+
   return {
     dir: {
       input: "src",
@@ -32,7 +44,7 @@ module.exports = function (eleventyConfig) {
       layouts: "layouts",
       output: "_site",
     },
-    pathPrefix: "/github-resources/",
+    pathPrefix,
     markdownTemplateEngine: "njk",
     htmlTemplateEngine: "njk",
     templateFormats: ["md", "njk"],

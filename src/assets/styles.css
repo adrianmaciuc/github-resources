@@ -177,6 +177,80 @@ a:hover {
   flex-direction: column;
 }
 
+/* Snippet Page Styles */
+.snippet-page {
+  padding: 32px;
+  background: white;
+  border: 3px solid var(--border-color);
+  border-radius: var(--radius-wobbly);
+  box-shadow: var(--shadow-hard);
+  position: relative;
+  /* Transform for playful effect */
+  transform: rotate(-0.5deg);
+}
+
+.snippet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px dashed var(--muted);
+}
+
+.back-link {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  color: var(--fg);
+  border-bottom: none; /* Override default */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.back-link:hover {
+  color: var(--accent);
+  transform: translateX(-4px);
+}
+
+/* Ensure code blocks wrap nicely */
+.snippet-content pre {
+  white-space: pre-wrap;
+  word-break: break-all;
+  background: #282c34;
+  color: #abb2bf;
+  padding: 16px;
+  border-radius: 4px;
+  /* Add consistent border like card */
+  border: 2px solid var(--border-color);
+  box-shadow: inset 2px 2px 4px rgba(0,0,0,0.2);
+  margin-top: 16px;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Ensure images don't overflow */
+.snippet-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-wobbly-md);
+  border: 2px solid var(--border-color);
+}
+
+/* Headings inside content */
+.snippet-content h1, 
+.snippet-content h2, 
+.snippet-content h3 {
+  margin-top: 24px;
+  margin-bottom: 16px;
+}
+
+/* Position the copy button in header */
+.snippet-header .code-copy {
+  position: static; /* Override absolute from card */
+  margin-left: auto;
+}
+
 .snippet-card:hover {
   transform: translate(-2px, -2px) rotate(1deg);
   box-shadow: var(--shadow-hard-hover);

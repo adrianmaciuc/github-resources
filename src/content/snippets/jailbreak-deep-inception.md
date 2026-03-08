@@ -1,5 +1,5 @@
 ---
-layout: base.njk
+layout: snippet.njk
 title: "Jailbreak method - Deep Inception"
 description: "Old jailbreak method that is based on the idea of deep inception, where you create multiple layers of fiction to hide the real intent and bypass the guardrails. This method is not recommended for use, but it is an interesting example of how creative and complex jailbreaks can be."
 category: "Agentic"
