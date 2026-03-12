@@ -8,7 +8,7 @@ language: "yaml"
 date: 2026-03-01
 ---
 
-```md
+````md
 ## Actions before everything
 
 - All actions, plans, or tasks should happen only after reading the codebase and getting a high-level understanding of what the project does and its folder structure.
@@ -41,19 +41,44 @@ Always ask the user whether they want to use the Breadcrumb Pattern before apply
 - Each project should have a breadcrumbs.md file.
 - Keep the default name `breadcrumbs.md`; if you need a scoped version, create `breadcrumb.md` in a descriptive folder (for example: deployments/breadcrumbs.md).
 - Create breadcrumbs.md in the root documentation folder, or another folder intended for AI/agent collaboration.
-- After each user interaction, append a short technical summary of what happened.
-- Include development work: features added, successful attempts, and failed attempts.
-- Include debugging and error-fixing notes with short technical details.
-- Include failures, errors, bugs, and problems even when no solution is found. If a solution exists, include it.
+- Do not write long-form narrative entries in breadcrumbs.md.
+- Keep breadcrumbs atomic: one entry per user-visible fix, review, investigation, or failed attempt.
+- After each relevant interaction, append a short technical entry with only the minimum retrieval context.
+- Use breadcrumbs for development work, successful attempts, failed attempts, reviews, investigations, and troubleshooting milestones.
+- Move explanation-heavy notes, debugging details, root-cause writeups, and remediation steps to bug-fixes.md.
+- Create bug-fixes.md in the same documentation or AI-collaboration area as breadcrumbs.md when the project needs durable bug history.
+- bug-fixes.md should store concise but explanation-friendly records for bugs, regressions, failures, and their fixes.
+- Every breadcrumb entry must include `type` and `area`. These fields are required because they improve retrieval quality.
+- Normalize test status to a small enum only: `passed`, `failed`, `partial`, `na`.
+- Normalize file paths to repo-relative paths only.
+- Include failures, errors, bugs, and problems even when no solution is found. If a solution exists, include the result and keep deep detail in bug-fixes.md when needed.
 - Include troubleshooting notes when relevant.
 - Capture both agent actions and user actions. Use git diff to identify user changes, and check previous breadcrumb entries to avoid duplicates.
 - If the user says NO (or otherwise declines breadcrumbs), stop asking about breadcrumbs from that point onward and inform the user you will no longer ask.
-- If breadcrumbs.md file already exists always append never replace
 
 Breadcrumb entry template (recommended):
 
-- Date/time: {Date/time} Task: {short description of the task} Change: {short description of the change} Failure/Error (if any): {short description of any failure or error that occurred} Fix/Outcome: {short description of how it was fixed or the outcome if no fix was needed}
-- Example: 2026-03-01: Added copy-to-clipboard feature with TDD. Added copy button markup, client JS at src/assets/copy.js, passthrough copy config, and updated tests. `npm test` passing.
+- Date/time:
+- Type:
+- Area:
+- Task:
+- Files:
+- Change:
+- Tests:
+- Failure/Error (if any):
+- Fix/Outcome:
+
+bug-fixes.md entry template (recommended):
+
+- Date/time:
+- Area:
+- Title:
+- Files:
+- Problem:
+- Cause:
+- Fix:
+- Tests:
+- Follow-up:
 
 ## Documentation practices
 
@@ -76,4 +101,116 @@ Definition of done:
 - Tests/lint/type checks pass.
 - Security checks completed.
 - Documentation/breadcrumb note updated when applicable.
+
+## Post-Task Checks
+
+Use this after any code change unless the user explicitly says to skip checks.
+
+## Scope
+
+- Keep checks small and practical.
+- Check only unit or integration validation.
+- Do not run e2e or Playwright/Cypress/Selenium.
+- Use `npx` for fallback commands.
+
+## 1. Check repo commands first
+
+Before running checks:
+
+- read `package.json`
+- read `README.md`
+- find test, typecheck, and lint commands
+- exclude any e2e, Playwright, or browser-test command
+
+If a documented non-e2e command exists, use it.
+If not, use the fallback commands below.
+
+## 2. Run only what matches the changed files
+
+### TypeScript / JavaScript
+
+Run when `.ts`, `.tsx`, `.js`, `.jsx`, or config files changed.
+
+```bash
+npx tsc --noEmit --pretty
+npx eslint . --max-warnings 0
+```
+````
+
+For non-e2e tests, prefer the documented project command.
+
+### Python
+
+Run when `.py` files changed.
+
+```bash
+npx pyright
+python3 -m ruff check .
+```
+
+If `ruff` is unavailable, use the repo's documented Python lint command.
+
+### HTML / CSS
+
+Run when `.html`, `.css`, `.scss`, or layout/styling files changed.
+
+Prefer the documented lint command first.
+If ESLint covers these files, run:
+
+```bash
+npx eslint . --max-warnings 0
+```
+
+If Stylelint is configured, run:
+
+```bash
+npx stylelint "**/*.{css,scss,html}"
+```
+
+## 3. Simple detection
+
+- `tsconfig.json` present -> run TypeScript check
+- ESLint config present -> run ESLint
+- Python files or `pyproject.toml` present -> run Python checks
+- HTML/CSS files changed -> run repo lint or supported fallback linters
+
+## 4. If a check fails
+
+1. fix the relevant files
+2. rerun only the failing check
+3. do not mark the task done until it passes or the user tells you to stop
+
+## 5. Report format
+
+```text
+POST-TASK CHECK SUMMARY
+
+Tests      ✅ passed / ⏭ skipped / ❌ failed
+Typecheck  ✅ passed / ⏭ skipped / ❌ failed
+Lint       ✅ passed / ⏭ skipped / ❌ failed
+Python     ✅ passed / ⏭ skipped / ❌ failed
+HTML/CSS   ✅ passed / ⏭ skipped / ❌ failed
+
+Errors:
+- path/to/file:line - short error summary
+
+Status: READY or NEEDS FIXES
+```
+
+## 6. Fallback set
+
+Use only the commands that apply:
+
+```bash
+npx tsc --noEmit --pretty
+npx eslint . --max-warnings 0
+npx vitest run
+npx jest --runInBand
+npx pyright
+python3 -m ruff check .
+npx stylelint "**/*.{css,scss,html}"
+```
+
+```
+
 ```
