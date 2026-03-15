@@ -9,54 +9,72 @@ date: 2026-03-01
 ---
 
 ````md
-## Actions before everything
+## 1. Instructions for Agents
 
 - All actions, plans, or tasks should happen only after reading the codebase and getting a high-level understanding of what the project does and its folder structure.
 
-Quick execution order for agents:
+**CRITICAL** Order of actions: Each step uses a sub-agent. The main agent waits for the sub-agent to finish before moving to the next step.
 
 1. Understand codebase and scope.
-2. Clarify only if needed.
-3. Implement atomic changes.
+2. If any of your outputs require you to make an assumption, ask follow-up questions to reach at least 90% confidence before proceeding.
+3. Implement changes.
 4. Run tests, lint, and type checks.
-5. Document key outcomes (and breadcrumbs if enabled).
+5. Document key outcomes in `breadcrumbs.md` and/or `bug-fixes.md`.
 
-## Quality Gates (before marking a task done)
+EACH task performed should adhere to the above order of actions every single time. This ensures that you have a good understanding of the codebase, that your assumptions are validated, that your changes are properly tested, and that your work is documented for future reference.
+
+## 2. Quality Gates (before marking a task done)
 
 - Deterministic acceptance tests (unit/integration) exist and pass.
+- Established checks are marked as passed according to the implementation docs.
 - Performance/complexity is appropriate for expected scale.
 - Security considerations addressed (inputs validated, secrets not hard-coded, least privilege).
 
-## Fixing bugs
+### 3.1 Bug-fixes history tracking - HIGHLY IMPORTANT
 
-- When you fix a bug requested by the user, write it in a markdown file, or append it to breadcrumbs if available.
-- Keep it short and descriptive so future agents avoid the same mistake.
+- Every time you fix a bug or regression, document it in `bug-fixes.md` with a concise but explanation-friendly entry. This should include the problem, root cause, and remediation steps. This helps build a knowledge base of issues and solutions for future reference and learning.
+- Each project should have a `bug-fixes.md` file, if not create one in the same documentation or AI-collaboration area as `breadcrumbs.md`.
+- `bug-fixes.md` entries are twice as big in size as `breadcrumbs.md` entries on average, due to the need for more detailed explanations, root cause analysis, and remediation steps.
 
-## Breadcrumb pattern - HIGHLY IMPORTANT
+### 3.2 `bug-fixes.md` entry template:
 
-Always ask the user whether they want to use the Breadcrumb Pattern before applying the rules below:
+- Incremental numbering
+- Date/time:
+- Area:
+- Title:
+- Files:
+- Problem:
+- Cause:
+- Fix:
+
+Example of `bug-fixes.md` entry:
+``
+
+1. Date/time: 2024-01-01 12:00 UTC | Area: authentication | Title: Login failure with special characters in password | Files: src/auth/login.ts, tests/auth/login.test.ts | Problem: Users with "@" symbol in their passwords cannot log in due to regex validation. | Cause: The regex pattern used for password validation did not account for special characters. | Fix: Updated the regex pattern to include special characters.
+   ``
+
+Follow strictly the templates and guidelines above to ensure consistency and usefulness of the bug-fixes documentation. The examples are crucial for understanding the format.
+
+## 4. Breadcrumb pattern - HIGHLY IMPORTANT
+
+Always use the Breadcrumb Pattern applying the rules below:
 
 - The primary purpose of this pattern is to track development and avoid repeating mistakes.
 - Breadcrumb entries should be easy to read for both humans and agents.
-- Each project should have a breadcrumbs.md file.
-- Keep the default name `breadcrumbs.md`; if you need a scoped version, create `breadcrumb.md` in a descriptive folder (for example: deployments/breadcrumbs.md).
-- Create breadcrumbs.md in the root documentation folder, or another folder intended for AI/agent collaboration.
-- Do not write long-form narrative entries in breadcrumbs.md.
-- Keep breadcrumbs atomic: one entry per user-visible fix, review, investigation, or failed attempt.
+- Each project should have a `breadcrumbs.md` file.
+- Keep the default name `breadcrumbs.md`; if you need a scoped version, create `breadcrumb.md` in a descriptive folder (for example: `deployments/breadcrumbs.md`).
+- Create `breadcrumbs.md` in the documentation folder, or another folder intended for AI/agent collaboration.
+- Do not write long-form narrative entries in `breadcrumbs.md`.
+- Keep breadcrumbs atomic: one entry per user-visible fix, review, investigation, failed attempt or similar.
 - After each relevant interaction, append a short technical entry with only the minimum retrieval context.
 - Use breadcrumbs for development work, successful attempts, failed attempts, reviews, investigations, and troubleshooting milestones.
-- Move explanation-heavy notes, debugging details, root-cause writeups, and remediation steps to bug-fixes.md.
-- Create bug-fixes.md in the same documentation or AI-collaboration area as breadcrumbs.md when the project needs durable bug history.
-- bug-fixes.md should store concise but explanation-friendly records for bugs, regressions, failures, and their fixes.
-- Every breadcrumb entry must include `type` and `area`. These fields are required because they improve retrieval quality.
-- Normalize test status to a small enum only: `passed`, `failed`, `partial`, `na`.
 - Normalize file paths to repo-relative paths only.
-- Include failures, errors, bugs, and problems even when no solution is found. If a solution exists, include the result and keep deep detail in bug-fixes.md when needed.
+- Include failures, errors, bugs, and problems even when no solution is found. If a solution exists, include the result and keep deep detail in `bug-fixes.md` when needed.
 - Include troubleshooting notes when relevant.
 - Capture both agent actions and user actions. Use git diff to identify user changes, and check previous breadcrumb entries to avoid duplicates.
 - If the user says NO (or otherwise declines breadcrumbs), stop asking about breadcrumbs from that point onward and inform the user you will no longer ask.
 
-Breadcrumb entry template (recommended):
+### 4.1 Breadcrumb entry template:
 
 - Incremental numbering
 - Date/time:
@@ -69,32 +87,11 @@ Breadcrumb entry template (recommended):
 - Failure/Error (if any):
 - Fix/Outcome:
 
-bug-fixes.md entry template (recommended):
-
-- Incremental numbering
-- Date/time:
-- Area:
-- Title:
-- Files:
-- Problem:
-- Cause:
-- Fix:
-- Tests:
-- Follow-up:
-
-Example of `breadcrumbs.md` entry:
+Good Example of `breadcrumbs.md` entry:
 ``
 
 1. Date/time: 2024-01-01 12:00 UTC | Type: improve user experience | Area: authentication | Task: Implemented password strength meter on the login page | Files: src/auth/login.tsx, src/components/PasswordStrengthMeter.tsx | Change: Added a new component to evaluate and display password strength based on common criteria. Integrated it into the login form. | Tests: Added unit tests for the PasswordStrengthMeter component, all tests pass. | Failure/Error: N/A | Fix/Outcome: Users can now see the strength of their passwords in real-time, improving security awareness.
    ``
-
-Example of `bug-fixes.md` entry:
-``
-
-1. Date/time: 2024-01-01 12:00 UTC | Area: authentication | Title: Login failure with special characters in password | Files: src/auth/login.ts, tests/auth/login.test.ts | Problem: Users with "@" symbol in their passwords cannot log in due to regex validation. | Cause: The regex pattern used for password validation did not account for special characters. | Fix: Updated the regex pattern to include special characters. | Tests: Added unit tests covering various special characters in passwords, all tests pass. | Follow-up: Monitor for any related issues and consider expanding test coverage for other special characters.
-   ``
-
-Follow strictl the templates and guidelines above to ensure consistency and usefulness of the breadcrumbs and bug-fixes documentation. The examples are crucial for understanding the format.
 
 Bad example of `breadcrumbs.md` entry:
 ``
@@ -109,7 +106,9 @@ Bad example of `breadcrumbs.md` entry:
 - Fix/Outcome: Breadcrumb history now follows the documented retrieval-friendly format.
   ``
 
-## Documentation practices
+Follow strictly the templates and guidelines above to ensure consistency and usefulness of the breadcrumbs. The examples are crucial for understanding the format.
+
+## 5. Documentation practices
 
 - Be concise, specific, and value-dense.
 - Write so that a new developer to this codebase can understand your writing, don’t assume your audience are experts in the topic/area you are writing about.
