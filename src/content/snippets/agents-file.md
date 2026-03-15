@@ -58,6 +58,7 @@ Always ask the user whether they want to use the Breadcrumb Pattern before apply
 
 Breadcrumb entry template (recommended):
 
+- Incremental numbering
 - Date/time:
 - Type:
 - Area:
@@ -70,6 +71,7 @@ Breadcrumb entry template (recommended):
 
 bug-fixes.md entry template (recommended):
 
+- Incremental numbering
 - Date/time:
 - Area:
 - Title:
@@ -79,6 +81,33 @@ bug-fixes.md entry template (recommended):
 - Fix:
 - Tests:
 - Follow-up:
+
+Example of `breadcrumbs.md` entry:
+``
+
+1. Date/time: 2024-01-01 12:00 UTC | Type: improve user experience | Area: authentication | Task: Implemented password strength meter on the login page | Files: src/auth/login.tsx, src/components/PasswordStrengthMeter.tsx | Change: Added a new component to evaluate and display password strength based on common criteria. Integrated it into the login form. | Tests: Added unit tests for the PasswordStrengthMeter component, all tests pass. | Failure/Error: N/A | Fix/Outcome: Users can now see the strength of their passwords in real-time, improving security awareness.
+   ``
+
+Example of `bug-fixes.md` entry:
+``
+
+1. Date/time: 2024-01-01 12:00 UTC | Area: authentication | Title: Login failure with special characters in password | Files: src/auth/login.ts, tests/auth/login.test.ts | Problem: Users with "@" symbol in their passwords cannot log in due to regex validation. | Cause: The regex pattern used for password validation did not account for special characters. | Fix: Updated the regex pattern to include special characters. | Tests: Added unit tests covering various special characters in passwords, all tests pass. | Follow-up: Monitor for any related issues and consider expanding test coverage for other special characters.
+   ``
+
+Follow strictl the templates and guidelines above to ensure consistency and usefulness of the breadcrumbs and bug-fixes documentation. The examples are crucial for understanding the format.
+
+Bad example of `breadcrumbs.md` entry:
+``
+
+- Date/time: 2026-03-15
+- Type: documentation
+- Area: process
+- Task: Standardized the breadcrumb file to match the project breadcrumb pattern.
+- Files: docs/breadcrumbs.md
+- Change: Removed the custom heading and rule prose, and normalized the file to atomic template-based entries.
+- Tests: na
+- Fix/Outcome: Breadcrumb history now follows the documented retrieval-friendly format.
+  ``
 
 ## Documentation practices
 
@@ -135,7 +164,6 @@ Run when `.ts`, `.tsx`, `.js`, `.jsx`, or config files changed.
 npx tsc --noEmit --pretty
 npx eslint . --max-warnings 0
 ```
-````
 
 For non-e2e tests, prefer the documented project command.
 
@@ -210,7 +238,4 @@ npx pyright
 python3 -m ruff check .
 npx stylelint "**/*.{css,scss,html}"
 ```
-
-```
-
-```
+````
