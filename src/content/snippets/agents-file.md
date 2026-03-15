@@ -115,6 +115,12 @@ Follow strictly the templates and guidelines above to ensure consistency and use
   Whenever you make a summary, it has to be the shortest summary possible. Keep the details to a minimum.
 - If you write a summary into a markdown file, keep it short, technical, and easy to read by a manager.
 
+### 5.1 Implementation plans
+
+- Each plan should have a clear tracking mechanism to monitor progress and ensure accountability. This can be achieved by breaking down the plan into smaller, actionable steps and using a checklist format to track completion.
+- Use ✅ **Implementation tracking:** Each item includes a checkbox.
+- If you (or a future agent) verify that a step is already implemented, mark it as `- [x]` and optionally add a short note. Keep this list updated as the codebase evolves.
+
 ## Performing tasks
 
 - Before performing any task, make sure to understand the requirements and the context of the task. If you have any doubts, ask for clarification before proceeding.
