@@ -22,3 +22,4 @@
 - Task: Fix CSS not loading when switching to custom domain on GitHub Pages
 - Change: Make Eleventy `pathPrefix` dynamic — if a `CNAME` file exists set `pathPrefix: '/'`, otherwise use `/github-resources/` or `PATH_PREFIX` env override
 - Outcome: Built site locally; asset URLs in `_site` will use `/` when CNAME exists. This avoids broken `/repo-name/...` absolute URLs on custom domains.
+25. Date/time: 2026-03-23 22:17 UTC | Type: improve user experience | Area: homepage | Task: Added a GitHub repository link button at the top of the landing page | Files: src/pages/index.njk, src/assets/styles.css | Change: Inserted a top-right external link to `https://github.com/adrianmaciuc/github-resources` using inline GitHub SVG markup and styled it as a button with accessible hidden text and focus treatment. | Tests: `npm test`, `npm run build` | Failure/Error: N/A | Fix/Outcome: Visitors can open the repository in a new tab directly from the top of the homepage.
