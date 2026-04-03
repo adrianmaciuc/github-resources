@@ -1,4 +1,6 @@
 import { describe, it, expect } from "vitest";
+import { readFileSync } from "node:fs";
+import path from "node:path";
 
 const isValidSnippet = (data) => {
   if (!data) return false;
@@ -52,5 +54,20 @@ describe("snippet metadata", () => {
 
     const sorted = [...items].sort(compareByDateDesc);
     expect(sorted.map((item) => item.title)).toEqual(["A", "C", "B"]);
+  });
+
+  it("includes the Feynman learning note content", () => {
+    const snippetPath = path.join(
+      process.cwd(),
+      "src/content/snippets/feynman-learning.md"
+    );
+    const snippet = readFileSync(snippetPath, "utf8");
+
+    expect(snippet).toContain('title: "Feynman learning"');
+    expect(snippet).toContain('tags: ["learning", "feynman"]');
+    expect(snippet).toContain("1. Pick the idea you want to learn.");
+    expect(snippet).toContain(
+      "5. Rewrite the explanation until it is clear, short, and easy to follow."
+    );
   });
 });
