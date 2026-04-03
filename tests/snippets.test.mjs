@@ -65,8 +65,9 @@ describe("snippet metadata", () => {
 
     expect(snippet).toContain('title: "Feynman learning"');
     expect(snippet).toContain('tags: ["learning", "feynman"]');
+    expect(snippet).toContain("1. Pick the idea you want to learn.");
     expect(snippet).toContain(
-      "Explain the idea in simple words as if teaching it to someone else."
+      "5. Rewrite the explanation until it is clear, short, and easy to follow."
     );
   });
 });

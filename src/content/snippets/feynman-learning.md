@@ -9,6 +9,9 @@ date: 2026-04-03
 ---
 
 ```md
-Explain the idea in simple words as if teaching it to someone else.
-If you get stuck, go back, study the gap, and simplify again.
+1. Pick the idea you want to learn.
+2. Explain it in simple words as if you are teaching a beginner.
+3. Notice where your explanation feels vague or breaks down.
+4. Go back to the source, study the gap, and fix the weak part.
+5. Rewrite the explanation until it is clear, short, and easy to follow.
 ```
