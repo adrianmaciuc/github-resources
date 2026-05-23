@@ -9,213 +9,150 @@ date: 2026-03-01
 ---
 
 ````md
-## 1. Instructions for Agents
+## Precedence rule
 
-- All actions, plans, or tasks should happen only after reading the codebase and getting a high-level understanding of what the project does and its folder structure.
+When sections conflict, lower section numbers take precedence. Later sections add detail; they do not override earlier ones.
 
-**CRITICAL** Order of actions: Each step uses a sub-agent. The main agent waits for the sub-agent to finish before moving to the next step.
+---
 
-1. Understand codebase and scope.
-2. If any of your outputs require you to make an assumption, ask follow-up questions to reach at least 90% confidence before proceeding.
-3. Implement changes.
-4. Run tests, lint, and type checks.
-5. Document key outcomes in `breadcrumbs.md` and/or `bug-fixes.md`.
+## 1. Workflow — required for every task
 
-EACH task performed should adhere to the above order of actions every single time. This ensures that you have a good understanding of the codebase, that your assumptions are validated, that your changes are properly tested, and that your work is documented for future reference.
+Before starting, read the relevant parts of the codebase to understand scope. If a repository uses a monorepo structure, executing commands and logging documents must target the package root of the service where changes were made, not the root of the workspace. Follow this sequence in order:
 
-## 2. Quality Gates (before marking a task done)
+1. **Understand** — Read existing files to map the workspace. Use an Explore sub-agent for unfamiliar structures.
+2. **Clarify** — Halt and ask follow-up questions only if:
+   - A required file/directory path is absent from the workspace.
+   - Task requirements directly contradict existing codebase patterns.
+   - Structural design decisions are not specified.
+   - You have to make an assumption. An assumption is when your reasoning confidence is below 90% or you do not have direct evidence. If you have to guess, ask instead. Do not proceed with guesses or assumptions.
+3. **Implement** — Apply changes in small, atomic steps. Break large tasks into sequential phases.
+4. **Verify** — Run post-task checks (§6) after every change.
+5. **Log breadcrumb** — Append an atomic log entry in `breadcrumbs.md` (§4).
+6. **Log bug-fix** — If a bug was resolved, write a full entry in `bug-fixes.md` (§3).
 
-- Deterministic acceptance tests (unit/integration) exist and pass.
-- Established checks are marked as passed according to the implementation docs.
-- Performance/complexity is appropriate for expected scale.
-- Security considerations addressed (inputs validated, secrets not hard-coded, least privilege).
+---
 
-### 3.1 Bug-fixes history tracking - HIGHLY IMPORTANT
+## 2. Definition of done
 
-- Every time you fix a bug or regression, document it in `bug-fixes.md` with a concise but explanation-friendly entry. This should include the problem, root cause, and remediation steps. This helps build a knowledge base of issues and solutions for future reference and learning.
-- Each project should have a `bug-fixes.md` file, if not create one in the same documentation or AI-collaboration area as `breadcrumbs.md`.
-- `bug-fixes.md` entries are twice as big in size as `breadcrumbs.md` entries on average, due to the need for more detailed explanations, root cause analysis, and remediation steps.
+Mark a task complete only when all criteria are met:
 
-### 3.2 `bug-fixes.md` entry template:
+- [ ] Target requirements are fully implemented.
+- [ ] Unit or integration tests exist and pass.
+- [ ] Test coverage is limited strictly to unit/integration suites (exclude e2e/browser tests).
+- [ ] Lint and type checks pass with zero warnings.
+- [ ] Credentials/secrets are stored exclusively in environment variables or configuration files.
+- [ ] Database/array traversals avoid nested loops ($O(N^2)$ complexity).
+- [ ] Checklists in `breadcrumbs.md` (and `bug-fixes.md` if applicable) are appended.
 
-- Incremental numbering
-- Date/time:
-- Area:
-- Title:
-- Files:
-- Problem:
-- Cause:
-- Fix:
+---
 
-Example of `bug-fixes.md` entry:
-``
+## 3. Bug-fix tracking (`bug-fixes.md`)
 
-1. Date/time: 2024-01-01 12:00 UTC | Area: authentication | Title: Login failure with special characters in password | Files: src/auth/login.ts, tests/auth/login.test.ts | Problem: Users with "@" symbol in their passwords cannot log in due to regex validation. | Cause: The regex pattern used for password validation did not account for special characters. | Fix: Updated the regex pattern to include special characters.
-   ``
+Write an entry every time you resolve a bug or regression. Create the file next to `breadcrumbs.md` if it is missing.
 
-Follow strictly the templates and guidelines above to ensure consistency and usefulness of the bug-fixes documentation. The examples are crucial for understanding the format.
+### 3.1 Template
 
-## 4. Breadcrumb pattern - HIGHLY IMPORTANT
+```
+N. Date/time: YYYY-MM-DD HH:MM UTC | Area: <area> | Title: <title> | Files: <files> | Problem: <what broke and how it manifested> | Cause: <why it broke> | Fix: <what was changed and why it resolves the cause>
+```
 
-Always use the Breadcrumb Pattern applying the rules below:
+### 3.2 Example
 
-- The primary purpose of this pattern is to track development and avoid repeating mistakes.
-- Breadcrumb entries should be easy to read for both humans and agents.
-- Each project should have a `breadcrumbs.md` file.
-- Keep the default name `breadcrumbs.md`; if you need a scoped version, create `breadcrumb.md` in a descriptive folder (for example: `deployments/breadcrumbs.md`).
-- Create `breadcrumbs.md` in the documentation folder, or another folder intended for AI/agent collaboration.
-- Do not write long-form narrative entries in `breadcrumbs.md`.
-- Keep breadcrumbs atomic: one entry per user-visible fix, review, investigation, failed attempt or similar.
-- After each relevant interaction, append a short technical entry with only the minimum retrieval context.
-- Use breadcrumbs for development work, successful attempts, failed attempts, reviews, investigations, and troubleshooting milestones.
-- Normalize file paths to repo-relative paths only.
-- Include failures, errors, bugs, and problems even when no solution is found. If a solution exists, include the result and keep deep detail in `bug-fixes.md` when needed.
-- Include troubleshooting notes when relevant.
-- Capture both agent actions and user actions. Use git diff to identify user changes, and check previous breadcrumb entries to avoid duplicates.
-- If the user says NO (or otherwise declines breadcrumbs), stop asking about breadcrumbs from that point onward and inform the user you will no longer ask.
+```
+1. Date/time: 2024-01-01 12:00 UTC | Area: authentication | Title: Login failure with special characters in password | Files: src/auth/login.ts, tests/auth/login.test.ts | Problem: Users with "@" in their password cannot log in. | Cause: Regex validation did not allow special characters. | Fix: Updated regex to permit all printable ASCII characters.
+```
 
-### 4.1 Breadcrumb entry template:
+---
 
-- Incremental numbering
-- Date/time:
-- Type:
-- Area:
-- Task:
-- Files:
-- Change:
-- Tests:
-- Failure/Error (if any):
-- Fix/Outcome:
+## 4. Breadcrumb tracking (`breadcrumbs.md`)
 
-Good Example of `breadcrumbs.md` entry:
-``
+Record completed work to prevent redundant searches or repeating past development errors.
 
-1. Date/time: 2024-01-01 12:00 UTC | Type: improve user experience | Area: authentication | Task: Implemented password strength meter on the login page | Files: src/auth/login.tsx, src/components/PasswordStrengthMeter.tsx | Change: Added a new component to evaluate and display password strength based on common criteria. Integrated it into the login form. | Tests: Added unit tests for the PasswordStrengthMeter component, all tests pass. | Failure/Error: N/A | Fix/Outcome: Users can now see the strength of their passwords in real-time, improving security awareness.
-   ``
+**Timing:** Commit a breadcrumb entry after completing a major task or a batch of 3–4 minor tasks. Avoid writing entries for individual micro-steps.
 
-Bad example of `breadcrumbs.md` entry:
-``
+**Opt-out:** Stop prompting and writing breadcrumbs if the user explicitly declines.
 
+Rules:
+
+- Write one scannable, atomic entry per user-visible outcome (feature, review, search, or failed attempt).
+- Restrict file paths to repo-relative paths only.
+- Compare with `git diff` and existing logs to avoid duplicate entries.
+
+### 4.1 Template
+
+```
+N. Date/time: YYYY-MM-DD HH:MM UTC | Type: <type> | Area: <area> | Task: <task> | Files: <files> | Change: <what changed> | Tests: <result> | Failure/Error: <error or N/A> | Fix/Outcome: <result>
+```
+
+### 4.2 Good example
+
+```
+1. Date/time: 2024-01-01 12:00 UTC | Type: feature | Area: authentication | Task: Added password strength meter to login page | Files: src/auth/login.tsx, src/components/PasswordStrengthMeter.tsx | Change: New component evaluates password strength on input; integrated into login form. | Tests: Unit tests added; all pass. | Failure/Error: N/A | Fix/Outcome: Users see real-time strength feedback.
+```
+
+### 4.3 Bad example — do not copy
+
+```
 - Date/time: 2026-03-15
 - Type: documentation
-- Area: process
-- Task: Standardized the breadcrumb file to match the project breadcrumb pattern.
+- Task: Standardized breadcrumb file.
 - Files: docs/breadcrumbs.md
-- Change: Removed the custom heading and rule prose, and normalized the file to atomic template-based entries.
-- Tests: na
-- Fix/Outcome: Breadcrumb history now follows the documented retrieval-friendly format.
-  ``
+- Fix/Outcome: Breadcrumb history now follows the documented format.
+```
 
-Follow strictly the templates and guidelines above to ensure consistency and usefulness of the breadcrumbs. The examples are crucial for understanding the format.
+---
 
 ## 5. Documentation practices
 
-- Be concise, specific, and value-dense.
-- Write so that a new developer to this codebase can understand your writing, don’t assume your audience are experts in the topic/area you are writing about.
-  Whenever you make a summary, it has to be the shortest summary possible. Keep the details to a minimum.
-- If you write a summary into a markdown file, keep it short, technical, and easy to read by a manager.
+- Write concisely for a developer unfamiliar with the codebase; avoid assuming domain knowledge.
+- Keep output summaries strictly technical, micro-sized, and readable by engineering managers.
 
 ### 5.1 Implementation plans
 
-- Each plan should have a clear tracking mechanism to monitor progress and ensure accountability. This can be achieved by breaking down the plan into smaller, actionable steps and using a checklist format to track completion.
-- Use ✅ **Implementation tracking:** Each item includes a checkbox.
-- If you (or a future agent) verify that a step is already implemented, mark it as `- [x]` and optionally add a short note. Keep this list updated as the codebase evolves.
+- Structure plans as a sequential, checkbox-based tracking list (`- [ ]`).
+- Mark verified or pre-existing steps as completed (`- [x]`) with a brief note.
+- Offer manual verification steps after each phase: provide a one-paragraph change explanation alongside a step-by-step testing guide.
 
-## Performing tasks
+### 5.2 Planning and design documentation
 
-- Before performing any task, make sure to understand the requirements and the context of the task. If you have any doubts, ask for clarification before proceeding.
-- Always test your code after making changes, and make sure to check for any errors or unexpected behavior. If you encounter any issues, try to debug them using the appropriate tools and resources, and don't hesitate to ask for help if you need it. Remember that debugging is a crucial part of the development process, and it's important to approach it with deep reasoning and a problem-solving mindset.
-- After each task, check for linter and type-checker errors, and fix any that appear. This helps maintain code quality and prevent future issues.
-- Always break down your tasks into smaller, manageable steps. This will help you to stay organized and focused, and it will also make it easier to identify any issues that may arise during the process.
-- All tasks should be atomic, meaning that they should be small and focused on a single aspect of the project. This will help to maintain the code quality and prevent potential issues in the future.
+Use active `context7` MCP tools or the `context7-cli` extension for planning and design tasks when they are registered in the current environment.
 
-Definition of done:
+---
 
-- Requirements implemented.
-- Tests/lint/type checks pass.
-- Security checks completed.
-- Documentation/breadcrumb note updated when applicable.
+## 6. Post-task checks
 
-## Post-Task Checks
+Execute checks automatically after every code change unless specifically instructed to skip.
 
-Use this after any code change unless the user explicitly says to skip checks.
+### 6.1 Check repo commands first
 
-## Scope
+Read `package.json` and `README.md`. Prioritize documented, non-e2e scripts. Exclude e2e, browser-based, Playwright, or Cypress suites. If no project commands exist, use the fallbacks in §6.2.
 
-- Keep checks small and practical.
-- Check only unit or integration validation.
-- Do not run e2e or Playwright/Cypress/Selenium.
-- Use `npx` for fallback commands.
+### 6.2 Run checks matching changed files
 
-## 1. Check repo commands first
+| Changed files                        | Commands to run                                                                      |
+| ------------------------------------ | ------------------------------------------------------------------------------------ |
+| `.ts`, `.tsx`, `.js`, `.jsx`, config | `npx tsc --noEmit --pretty` then `npx eslint . --max-warnings 0`                     |
+| `.py`                                | `npx pyright` then `python3 -m ruff check .` (use repo command if `ruff` is missing) |
+| `.html`, `.css`, `.scss`             | `npx eslint . --max-warnings 0` (or `npx stylelint` if configured)                   |
 
-Before running checks:
+For test verification, prioritize the project's native command over `npx vitest run` or `npx jest --runInBand`.
 
-- read `package.json`
-- read `README.md`
-- find test, typecheck, and lint commands
-- exclude any e2e, Playwright, or browser-test command
+### 6.3 Automation triggers
 
-If a documented non-e2e command exists, use it.
-If not, use the fallback commands below.
+- `tsconfig.json` present → Execute TypeScript check.
+- ESLint configuration present → Execute ESLint.
+- Python files / configuration present → Execute Python checks.
 
-## 2. Run only what matches the changed files
+### 6.4 Handling failures
 
-### TypeScript / JavaScript
+1. If a test or linter check fails, run an integrated codebase search to check if the error is a project-wide configuration mismatch before attempting manual code modifications.
+2. Fix the targeted codebase files.
+3. Execute _only_ the failing check.
+4. Repeat until validation passes. Halt execution only if instructed by the user.
 
-Run when `.ts`, `.tsx`, `.js`, `.jsx`, or config files changed.
+### 6.5 Report format
 
-```bash
-npx tsc --noEmit --pretty
-npx eslint . --max-warnings 0
 ```
-
-For non-e2e tests, prefer the documented project command.
-
-### Python
-
-Run when `.py` files changed.
-
-```bash
-npx pyright
-python3 -m ruff check .
-```
-
-If `ruff` is unavailable, use the repo's documented Python lint command.
-
-### HTML / CSS
-
-Run when `.html`, `.css`, `.scss`, or layout/styling files changed.
-
-Prefer the documented lint command first.
-If ESLint covers these files, run:
-
-```bash
-npx eslint . --max-warnings 0
-```
-
-If Stylelint is configured, run:
-
-```bash
-npx stylelint "**/*.{css,scss,html}"
-```
-
-## 3. Simple detection
-
-- `tsconfig.json` present -> run TypeScript check
-- ESLint config present -> run ESLint
-- Python files or `pyproject.toml` present -> run Python checks
-- HTML/CSS files changed -> run repo lint or supported fallback linters
-
-## 4. If a check fails
-
-1. fix the relevant files
-2. rerun only the failing check
-3. do not mark the task done until it passes or the user tells you to stop
-
-## 5. Report format
-
-```text
 POST-TASK CHECK SUMMARY
 
 Tests      ✅ passed / ⏭ skipped / ❌ failed
@@ -225,22 +162,8 @@ Python     ✅ passed / ⏭ skipped / ❌ failed
 HTML/CSS   ✅ passed / ⏭ skipped / ❌ failed
 
 Errors:
-- path/to/file:line - short error summary
+- path/to/file:line — short error summary
 
 Status: READY or NEEDS FIXES
-```
-
-## 6. Fallback set
-
-Use only the commands that apply:
-
-```bash
-npx tsc --noEmit --pretty
-npx eslint . --max-warnings 0
-npx vitest run
-npx jest --runInBand
-npx pyright
-python3 -m ruff check .
-npx stylelint "**/*.{css,scss,html}"
 ```
 ````
